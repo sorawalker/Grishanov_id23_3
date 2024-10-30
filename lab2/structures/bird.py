@@ -7,6 +7,8 @@ from Grishanov_id23_3.lab2.structures.pillar import Pillar
 class Bird:
 
     def __init__(self, canvas: MainCanvas, sitting_time: int, pillars: [Pillar]):
+        self.is_leave = False
+        self.leave_timer = None
         self.sitting_time = sitting_time
         self.canvas = canvas
         self.x = random.randint(50, 550)
@@ -45,14 +47,14 @@ class Bird:
                 else:
                     self.canvas.coords(self.bird_id, x - 10, y - 10, x + 10, y + 10)
                     self.animation_progress = False
-                    if on_animation_ended is not None:
-                        on_animation_ended()
-                    if self.current_pillar is None:
+                    if self.current_pillar is None and not self.is_leave:
                         self.is_can_fly = True
                         if self.can_seat():
                             self.choose_random_pillar()
                         else:
                             self.fly()
+                    if on_animation_ended is not None:
+                        on_animation_ended()
 
             animate()
 
@@ -61,14 +63,23 @@ class Bird:
 
     def is_pillar_broken(self):
         if not self.current_pillar.is_fixed:
-            self.current_pillar = None
+            if self.leave_timer is not None:
+                self.leave_timer.cancel()
             self.is_can_fly = True
-            self.fly()
+            self.fly_away()
+            self.current_pillar = None
         elif self.current_pillar is not None:
-            self.canvas.after(50, self.is_pillar_broken)
+            self.canvas.after(100, self.is_pillar_broken)
 
     def fly_away(self):
+        self.fly()
         self.current_pillar.decrease_birds_count()
+
+    def leave(self):
+        self.is_leave = True
+        self.is_can_fly = True
+
+        self.animation(*random.choice([[i, -10] for i in range(-10, 500, 10)]))
 
     def choose_random_pillar(self):
         available_pillars = list(filter(lambda x: x.is_fixed, self.pillars))
@@ -78,19 +89,23 @@ class Bird:
 
             def on_animation():
                 self.current_pillar.increase_birds_count()
+                self.leave_timer = Timer(1, self.leave)
+                self.leave_timer.start()
                 self.is_pillar_broken()
-                self.canvas.after(50, self.fly)
 
             self.animation(
-                random.randrange(self.current_pillar.x - 30, self.current_pillar.x + 30, random.randint(1, 10)), self.current_pillar.y, on_animation_ended=on_animation)
+                random.randrange(self.current_pillar.x - 30, self.current_pillar.x + 30, random.randint(1, 10)),
+                self.current_pillar.y, on_animation_ended=on_animation)
         else:
+            self.current_pillar = None
             self.fly()
 
     def fly(self):
-        if self.is_can_fly:
+        if self.is_can_fly and not self.is_leave:
             x = random.randint(10, 490)
             y = random.randint(10, 240)
 
             def on_animation():
                 self.canvas.after(50, self.fly)
+
             self.animation(x, y, on_animation_ended=on_animation)

@@ -18,8 +18,10 @@ class Pillar:
         self.check_birds()
 
     def draw(self):
-        self.post_id = self.canvas.create_rectangle(self.x, self.y, self.x + 10, self.y + 200, fill='gray', outline='gray')
-        self.beam_id = self.canvas.create_rectangle(self.x - 30, self.y, self.x + 40, self.y + 10, fill='gray', outline='gray')
+        self.post_id = self.canvas.create_rectangle(self.x, self.y, self.x + 10, self.y + 200, fill='gray',
+                                                    outline='gray')
+        self.beam_id = self.canvas.create_rectangle(self.x - 30, self.y, self.x + 40, self.y + 10, fill='gray',
+                                                    outline='gray')
 
     def increase_birds_count(self):
         self.count_birds += 1
@@ -32,19 +34,19 @@ class Pillar:
             self.canvas.itemconfigure(self.beam_id, state='hidden')
             self.canvas.itemconfigure(self.post_id, state='hidden')
             self.is_fixed = False
-            self.count_birds = 0
+            self.break_pillar_flag = True
             timer = Timer(self.recovery_time, self.fix_pillar)
             timer.start()
-            self.break_pillar_flag = True
 
     def fix_pillar(self):
-        self.is_fixed = True
         self.canvas.itemconfigure(self.beam_id, state='normal')
         self.canvas.itemconfigure(self.post_id, state='normal')
+        self.is_fixed = True
         self.break_pillar_flag = False
 
     def check_birds(self):
-        if self.count_birds >= self.max_birds:
-            self.break_pillar()
+        if self.is_fixed:
+            if self.count_birds >= self.max_birds:
+                self.break_pillar()
 
         self.canvas.after(100, self.check_birds)

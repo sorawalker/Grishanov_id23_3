@@ -11,13 +11,13 @@ def main():
     root.minsize(500, 500)
     canvas = MainCanvas(root)
     pillars = []
-    for i in range(1, 5):
-        pillar = Pillar(canvas, 3, 5, 70 * i + (50 * (i - 1)), 300)
+    for i in range(1, 6):
+        pillar = Pillar(canvas, 2, 5, 70 * i + (50 * (i - 1)), 300)
         pillars.append(pillar)
         pillar.draw()
 
     birds = []
-    for _ in range(10):
+    for _ in range(5):
         bird = Bird(canvas, 5, pillars)
         birds.append(bird)
         bird.draw()
