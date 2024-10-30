@@ -25,14 +25,14 @@ def main():
     root.minsize(500, 500)
     canvas = MainCanvas(root)
     pillars = []
-    for i in range(1, 6):
+    for i in range(1, 5):
         pillar = Pillar(canvas, base_settings['PILLARS_DURABILITY'], base_settings['PILLARS_REPAIR_INTERVAL'], 70 * i + (50 * (i - 1)), 300)
         pillars.append(pillar)
         pillar.draw()
 
     birds = []
     for _ in range(base_settings['BIRDS_COUNT']):
-        bird = Bird(canvas, random.randint(1,6), pillars)
+        bird = Bird(canvas, random.randint(1, 6), pillars)
         birds.append(bird)
         bird.draw()
         bird.fly()

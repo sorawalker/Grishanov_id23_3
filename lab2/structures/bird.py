@@ -89,7 +89,7 @@ class Bird:
 
             def on_animation():
                 self.current_pillar.increase_birds_count()
-                self.leave_timer = Timer(1, self.leave)
+                self.leave_timer = Timer(self.sitting_time, self.leave)
                 self.leave_timer.start()
                 self.is_pillar_broken()
 
