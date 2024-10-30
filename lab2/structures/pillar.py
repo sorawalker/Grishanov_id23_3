@@ -1,4 +1,4 @@
-from Grishanov_id23_3.lab2.structures.canvas import MainCanvas
+from structures.canvas import MainCanvas
 from threading import Timer
 
 

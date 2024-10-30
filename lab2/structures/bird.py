@@ -1,7 +1,7 @@
 import random
 from threading import Timer
-from Grishanov_id23_3.lab2.structures.canvas import MainCanvas
-from Grishanov_id23_3.lab2.structures.pillar import Pillar
+from structures.canvas import MainCanvas
+from structures.pillar import Pillar
 
 
 class Bird:
