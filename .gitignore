@@ -12,6 +12,8 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+.idea
+
 */.idea
 
 # AWS User-specific
