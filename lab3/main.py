@@ -103,6 +103,12 @@ class MainCanvas(Canvas):
     def on_click(self, event):
         x, y = event.x, event.y
 
+        for pillar in self.pillars:
+            if abs(x - pillar.x) < 50:
+                pillar.durability = self.pillar_durability
+                print('Change current pillar durability')
+                return
+
         new_pillar = Pillar(self, x,
                             y)
         self.pillars.append(new_pillar)
@@ -127,6 +133,7 @@ class Pillar:
     def __init__(self, canvas: MainCanvas, x: int, y: int):
         self.canvas = canvas
         self.count_birds = 0
+        self.durability = self.canvas.pillar_durability
         self.x = x
         self.break_pillar_flag = False
         self.y = y
@@ -169,7 +176,7 @@ class Pillar:
 
     def check_birds(self):
         if self.is_fixed:
-            if self.count_birds >= self.canvas.pillar_durability:
+            if self.count_birds >= self.durability:
                 self.break_pillar()
 
         self.canvas.after(100, self.check_birds)
