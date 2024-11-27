@@ -188,23 +188,10 @@ class Bird:
         self.bird_id = None
         self.is_can_fly = True
         self.current_pillar = None
-        self.check_pause()
 
     def draw(self):
         self.bird_id = self.canvas.create_oval(0, 0, 20, 20, fill='red')
         self.canvas.coords(self.bird_id, self.x - 10, self.y - 10, self.x + 10, self.y + 10)
-
-    def check_pause(self):
-        if self.leave_timer is not None:
-            if self.canvas.is_paused:
-                self.leave_timer.cancel()
-            else:
-                try:
-                    self.leave_timer.start()
-                except RuntimeError:
-                    pass
-
-        self.canvas.after(50, self.check_pause)
 
     def animation(self, x, y, on_animation_ended=None):
         self.is_can_fly = False
@@ -262,11 +249,15 @@ class Bird:
         self.current_pillar.decrease_birds_count()
 
     def leave(self):
-        self.is_leave = True
-        self.is_can_fly = True
-        self.leave_timer = None
+        if not self.canvas.is_paused:
+            self.is_leave = True
+            self.is_can_fly = True
+            self.leave_timer = None
 
-        self.animation(*random.choice([[i, -10] for i in range(-10, 500, 10)]))
+            self.animation(*random.choice([[i, -10] for i in range(-10, 500, 10)]))
+        else:
+            self.leave_timer = Timer(self.sitting_time, self.leave)
+            self.leave_timer.start()
 
     def choose_random_pillar(self):
         available_pillars = list(filter(lambda x: x.is_fixed, self.canvas.pillars))
