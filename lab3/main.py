@@ -104,7 +104,7 @@ class MainCanvas(Canvas):
         x, y = event.x, event.y
 
         for pillar in self.pillars:
-            if abs(x - pillar.x) < 50:
+            if abs(x - pillar.x) < 50 and abs(y - pillar.y) < 20:
                 pillar.durability = self.pillar_durability
                 print('Change current pillar durability')
                 return
