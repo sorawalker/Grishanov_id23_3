@@ -59,6 +59,14 @@ class MainCanvas(Canvas):
 
     def pause_handler(self):
         self.is_paused = not self.is_paused
+        if self.is_paused:
+            if self.auto_spawn_bird_timer is not None:
+                try:
+                    self.auto_spawn_bird_timer.cancel()
+                except RuntimeError:
+                    print('Failed cancel auto_spawn_bird_timer')
+        else:
+            self.auto_spawn_bird()
 
     def spawn_bird(self):
         bird = Bird(self, random.randint(1, 6))
@@ -71,8 +79,8 @@ class MainCanvas(Canvas):
             self.spawn_bird()
             self.auto_spawn_bird()
 
-        timer = Timer(self.bird_spawn_interval, spawn_bird_with_timer)
-        timer.start()
+        self.auto_spawn_bird_timer = Timer(self.bird_spawn_interval, spawn_bird_with_timer)
+        self.auto_spawn_bird_timer.start()
 
     def update_pillar_durability(self):
         try:
