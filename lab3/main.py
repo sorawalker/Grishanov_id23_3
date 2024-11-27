@@ -6,6 +6,7 @@ from threading import Timer
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
+
 class MainCanvas(Canvas):
 
     def __init__(self, root: Tk):
@@ -28,7 +29,6 @@ class MainCanvas(Canvas):
         self.init_pillars()
         self.init_birds()
         self.auto_spawn_bird()
-
 
     def create_controls(self):
         control_frame = Frame(self.root)
@@ -56,7 +56,6 @@ class MainCanvas(Canvas):
         self.bird_spawn_interval_box.insert(0, str(self.bird_spawn_interval))
 
         self.pause_button = Button(control_frame, text="Pause", command=self.pause_handler).pack(side=LEFT, padx=5)
-
 
     def pause_handler(self):
         self.is_paused = not self.is_paused
@@ -115,7 +114,6 @@ class MainCanvas(Canvas):
         self.pack()
 
 
-
 class Pillar:
 
     def __init__(self, canvas: MainCanvas, x: int, y: int):
@@ -172,7 +170,7 @@ class Bird:
         self.leave_timer = None
         self.sitting_time = sitting_time
         self.canvas = canvas
-        self.x = random.randint(50, WINDOW_WIDTH-200)
+        self.x = random.randint(50, WINDOW_WIDTH - 200)
         self.y = -100
         self.animation_progress = False
         self.bird_id = None
