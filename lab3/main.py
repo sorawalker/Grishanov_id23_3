@@ -158,10 +158,14 @@ class Pillar:
             self.repair_timer.start()
 
     def fix_pillar(self):
-        self.canvas.itemconfigure(self.beam_id, state='normal')
-        self.canvas.itemconfigure(self.post_id, state='normal')
-        self.is_fixed = True
-        self.break_pillar_flag = False
+        if not self.canvas.is_paused:
+            self.canvas.itemconfigure(self.beam_id, state='normal')
+            self.canvas.itemconfigure(self.post_id, state='normal')
+            self.is_fixed = True
+            self.break_pillar_flag = False
+        else:
+            self.repair_timer = Timer(self.canvas.pillar_repair_interval, self.fix_pillar)
+            self.repair_timer.start()
 
     def check_birds(self):
         if self.is_fixed:
